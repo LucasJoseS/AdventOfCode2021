@@ -1,23 +1,33 @@
+from sys import argv
+
 def main():
-    last_in = input()
-    last_num = int()
-    is_first = True
-    count = 0
+    values = [value.replace("\n", "") for value in open(argv[1]).readlines()]
+    window_a = 0
+    window_b = 0
+    window_b_back = 0
+    counter = 0
+    window_range = 3
 
-    while last_in != "EOF":
-        if is_first:
-            last_num = int(last_in)
-            is_first = False
-            continue
+    for i in range(0, len(values)-2, 2):
+        for value in values[slice(i, i+window_range)]:
+            window_a += int(value)
 
-        if last_num < int(last_in):
-            count += 1
+        for value in values[slice(i+1, i+window_range+1)]:
+            window_b += int(value)
 
-        last_num = int(last_in)
-        last_in = input()
+        if window_a < window_b:
+            counter += 1
 
-    return count
-    
+        if window_b_back != 0 and window_b_back < window_a:
+            counter += 1
+
+        window_b_back = window_b
+        window_a = window_b = 0
+
+    return counter
+
+
+   
 if __name__ == "__main__":
     print(main())
 
