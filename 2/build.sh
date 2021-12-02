@@ -1,4 +1,7 @@
 #!/usr/bin/sh
 
+echo "Simple input"
 io submarine.io simple.input
-io submarine.io my.input
+
+echo "Full input"
+io submarine.io full.input
