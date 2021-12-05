@@ -14,7 +14,6 @@ int main(int argc, char *argv[])
     {
       int x1, x2, y1, y2 = 0;
       fscanf(fp, "%d,%d -> %d,%d", &x1, &y1, &x2, &y2);
-      printf("%d,%d  %d,%d %d\n", x1, y1, x2, y2, ftell(fp));
 
       if(x1 == x2 || y1 == y2)
 	{
@@ -58,6 +57,45 @@ int main(int argc, char *argv[])
 		}
 	    }
 	}
+      else
+	{
+	  if(x1 > x2 && y1 < y2)
+	    {
+	      while(x1 >= x2 && y1 <= y2)
+		{
+		  table[x1][y1]++;
+		  x1--;
+		  y1++;
+		}
+	    }
+	  else if(x1 < x2 && y1 > y2)
+	    {
+	      while(x1 <= x2 && y1 >= y2)
+		{
+		  table[x1][y1]++;
+		  x1++;
+		  y1--;
+		}
+	    }
+	  else if(x1 > x2 && y1 > y2)
+	    {
+	      while(x1 >= x2 && y1 >= y2)
+		{
+		  table[x1][y1]++;
+		  x1--;
+		  y1--;
+		}
+	    }
+	  else if(x1 < x2 && y1 < y2)
+	    {
+	      while(x1 <= x2 && y1 <= y2)
+		{
+		  table[x1][y1]++;
+		  x1++;
+		  y1++;
+		}
+	    }
+	  }
     }
 
   int count = 0;
@@ -65,11 +103,14 @@ int main(int argc, char *argv[])
     {
       for(int j=0; j<1000; j++)
 	{
+	  printf("%d ", table[j][i]);
+	  
 	  if(table[j][i] >= 2)
 	    {
 	      count++;
 	    }
 	}
+      printf("\n");
     }
 
   printf("%d\n", count);
