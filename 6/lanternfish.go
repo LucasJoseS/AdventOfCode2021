@@ -5,35 +5,51 @@ import (
     "fmt"
     "strings"
     "strconv"
+    "log"
 )
 
 func main() {
      file, err := os.Open(os.Args[1])
-     if err != nil { fmt.Println("File no found"); return }
+     if err != nil { log.Fatal(err) }
      defer file.Close()
 
      stat, _ := file.Stat()
+
      bs := make([]byte, stat.Size())
-     
      _, err = file.Read(bs)
-     if err != nil { return }
+     if err != nil { log.Fatal(err) }
+
+     fishs := make(map[int]uint64, 0) // map[clock] count fishs
 
      content := string(bs)
-     fish_ages_str := strings.Split(content, ",")
-     fishs := make([]int, len(fish_ages_str))
-     
-     for i, s := range fish_ages_str {
-     	 fishs[i], _ = strconv.Atoi(s)
+     for _ , s := range strings.Split(content, ",") {
+     	 clock, err := strconv.Atoi(s)
+	 if err != nil { log.Fatal(err) }
+
+	 fishs[clock] ++
      }
 
-     max_day := 80
-     for day := 0; day < max_day+1; day++ {
-     	 fmt.Println(day, len(fishs))
-	 
-     	 for ifish, vfish := range fishs {
-	     fishs[ifish] = fishs[ifish] - 1
+     for day := 0; day<=256; day++ {
+     	 fmt.Print(day)
 
-	     if vfish == 0 { fishs[ifish] = 6; fishs = append(fishs, 8) }
+	 sum := uint64(0)
+	 for i := 0; i <= 8; i++ {
+	     sum += fishs[i]
+	 }
+
+	 fmt.Println(" ", sum)
+
+	 for key := 0; key <= 8; key++ {
+	     if value, ok := fishs[key]; ok {
+	     	fishs[key-1] = value
+		fishs[key] = 0
+	     }
+	 }
+
+	 if value, ok := fishs[-1]; ok && value > 0 {
+	    fishs[8] = value
+	    fishs[6] += value
+	    fishs[-1] = 0
 	 }
      }
- }
+}
