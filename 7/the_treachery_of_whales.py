@@ -10,7 +10,7 @@ for go_to_pos in range(_min, _max):
     fuel_cost = 0
     
     for actual_pos in _input:
-        fuel_cost += abs(actual_pos - go_to_pos)
+        fuel_cost += sum(range(abs(actual_pos - go_to_pos) + 1))
 
     fuel_costs[go_to_pos] = fuel_cost
 
