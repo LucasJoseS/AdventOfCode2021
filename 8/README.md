@@ -6,3 +6,4 @@
 ## Quick start
 ```console
 $ ./build.sh
+```
