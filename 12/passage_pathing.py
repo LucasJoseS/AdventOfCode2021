@@ -1,17 +1,24 @@
 caves = dict()
+unique_paths = list()
 
-def paths(local, history):
+def paths_with_chosen_one(local, history, chosen_one):
     if local == "end":
-        return 1
+        if history not in unique_paths:
+            unique_paths.append(history)
+            return 1
+        else:
+            return 0
         
     if local.islower() and local in history:
-        return 0
+        if local != chosen_one or history.count(chosen_one) == 2:
+            return 0
 
     history.append(local)
     count = 0
+
     for cave in caves[local]:
-        count += paths(cave, history.copy())
-    return count  
+        count += paths_with_chosen_one(cave, history.copy(), chosen_one)
+    return count    
 
 def main(filename):
     with open(filename) as file:
@@ -28,7 +35,8 @@ def main(filename):
             except:
                 caves[last] = [first]
 
-        print("Paths: ", paths("start", []))
+        small_caves = [cave for cave in caves.keys() if cave.islower() and cave != "start" and cave != "end"]
+        print("Paths: ", sum([paths_with_chosen_one("start", list(), chosen) for chosen in small_caves]))
         
 
 from sys import argv
