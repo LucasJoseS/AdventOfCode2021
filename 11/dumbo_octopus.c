@@ -41,8 +41,9 @@ int main(int argc,  char **argv)
   if(fp == NULL) { printf("File not found\n"); exit(1); }
 
   int octopus[N][N];
-  int counter = 0;
+  int counter_steps = 0;
   int aux;
+  bool all_is_zero = true;
 
   for(int r=0; r<N; r++) {
     for(int c=0; c<N; c++) {
@@ -52,7 +53,7 @@ int main(int argc,  char **argv)
     fscanf(fp, "\n");
   }
 
-  for(int step=0; step<100; step++) {
+  do {
     for(int row=0; row<N; row++) {
       for(int col=0; col<N; col++) {
         octopus[row][col]++;
@@ -67,14 +68,24 @@ int main(int argc,  char **argv)
         for(int col=0; col<N; col++) {
           if(octopus[row][col] > 9) {
             flash(octopus, row, col);
-            counter++;
             try_flash = true;
           }
         }
       }
     }
-  }
+
+    all_is_zero = true;
+    for(int row=0; row<N; row++) {
+      for(int col=0;  col<N; col++) {
+        if(octopus[row][col] != 0) {
+          all_is_zero = false;
+        }
+      }
+    }
+
+    counter_steps++;
+  } while(!all_is_zero);
 
   for(int row=0; row<N; row++) { for(int col=0; col<N; col++) { printf("%d ", octopus[row][col]); } printf("\n"); }
-  printf("%d\n", counter);
+  printf("%d\n", counter_steps);
 }
